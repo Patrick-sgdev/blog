@@ -1,5 +1,33 @@
 <?php
 
+use Illuminate\Support\Facades\File;
+
+if (!function_exists('asset_path')) {
+    /**
+     * Returns the asset path with a public prefix
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    function asset_path($path)
+    {
+        if (File::exists('public/' . $path)) {
+            return asset('/public/' . $path);
+        }
+        
+        if(File::exists($path)) {
+            return asset($path);
+        }
+
+        if(str_contains($path, 'http')) {
+            return $path;
+        }
+
+        return asset('https://fakeimg.pl/600x400?text=MEDIA+NOT+FOUND');
+    }
+}
+
 if (!function_exists('hasRole')) {
     /**
      * Check if user has the role

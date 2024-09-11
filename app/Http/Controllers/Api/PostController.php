@@ -2,10 +2,35 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
-    //
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+           'content' => 'required|max:100000000' 
+        ]);
+
+        if($validator->fails()) {
+
+        }
+
+        $post = Post::create(attributes: [
+            'user_id' => auth()->user()->id,
+            'title' => fake()->text(),
+            'content' => $request->content
+        ]);
+
+        return response()->json(data: [
+            'status' => 'success',
+            'data' => [
+                'post_id' => $post->id,
+            ],
+            'message' => trans('Post successfully created.'),
+        ]);
+    }
 }
