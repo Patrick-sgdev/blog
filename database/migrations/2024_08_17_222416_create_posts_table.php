@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('title');
+            $table->text('banner');
+            $table->text('slug');
+            $table->text('short_description');
             $table->string('status')->default('draft');
             $table->longText('content');
             $table->softDeletes();

@@ -24,7 +24,7 @@ if (!function_exists('asset_path')) {
             return $path;
         }
 
-        return asset('https://fakeimg.pl/600x400?text=MEDIA+NOT+FOUND');
+        return '';
     }
 }
 

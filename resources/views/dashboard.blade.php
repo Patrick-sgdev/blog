@@ -11,7 +11,7 @@
         <h1 class="dark:text-white text-2xl font-bold mb-4">Posts</h1>
         @foreach (auth()->user()->posts as $post)
           <a href="{{ route('get-post', $post->id) }}"
-            class="inline-flex items-center gap-x-1 rounded-full border border-dashed border-gray-200 bg-white px-2 py-1.5 text-xs font-medium text-gray-800 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
+            class="inline-flex items-center gap-x-1 rounded-full border border-dashed border-gray-200 bg-white px-2 py-1.5 text-xs font-medium text-gray-800 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:bg-gray-700">
             {{ Str::limit($post->title, 10) }}
           </a>
         @endforeach

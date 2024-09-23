@@ -25,11 +25,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -41,15 +37,6 @@ class User extends Authenticatable
         'remember_token',
         'two_factor_recovery_codes',
         'two_factor_secret',
-    ];
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array<int, string>
-     */
-    protected $appends = [
-        'profile_photo_url',
     ];
 
     /**
@@ -75,9 +62,27 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function hasRoleByName(string $name)
+    {
+        $has = false;
+        foreach($this->roles as $role) {
+            if($role->name == $name) {
+                $has = true;
+                break;
+            }
+        }
+
+        return $has;
     }
 
     public function tags()

@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
+
+    public function posts()
+    {
+        return view('dashboard.posts');
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -34,7 +40,14 @@ class PostController extends Controller
 
     public function post(Post $post)
     {
-        return view(view: 'post')->with([
+        return view(view: 'dashboard.post')->with([
+            'post' => $post
+        ]);
+    }
+
+    public function editPost(Post $post)
+    {
+        return view(view: 'dashboard.posts.edit')->with([
             'post' => $post
         ]);
     }
