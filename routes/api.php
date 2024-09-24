@@ -3,20 +3,20 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TagController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\CategoryController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::controller(AuthController::class)->group(function () {
+    Route::post('login', 'login');
+});
 
 Route::controller(PostController::class)->group(function () {
-    // Route::get('get-posts', 'posts');
-    // Route::get('get-post/{id}', 'post');
-    // Route::post('create-post', 'store')->name('create-post');
-    // Route::post('update-tag/{id}', 'update');
-    // Route::post('trash-tag/{id}', 'trash');
-    // Route::post('delete-tag/{id}', 'delete');
+    Route::get('get-posts', 'getPosts');
+    Route::get('get-post/{id}', 'getPost');
+    Route::post('store-post', 'store')->name('create-post');
+    Route::post('update-post/{id}', 'update');
 });
 
 //Tags
@@ -25,16 +25,23 @@ Route::controller(TagController::class)->group(function () {
     Route::get('get-tag/{id}', 'tag');
     Route::post('create-tag', 'store');
     Route::post('update-tag/{id}', 'update');
-    Route::post('trash-tag/{id}', 'trash');
-    Route::post('delete-tag/{id}', 'delete');
 });
 
-//Category
+//Categories
 Route::controller(CategoryController::class)->group(function () {
     Route::get('get-categories', 'categories');
     Route::get('get-category/{id}', 'category');
     Route::post('create-category', 'store');
     Route::post('update-category/{id}', 'update');
-    Route::post('trash-category/{id}', 'trash');
-    Route::post('delete-category/{id}', 'delete');
+});
+
+//Roles
+Route::controller(RoleController::class)->group(function () {
+    Route::get('get-roles', 'roles');
+    Route::get('get-role/{id}', 'role');
+    Route::post('create-role', 'store');
+    Route::post('update-role/{id}', 'update');
+    Route::post('trash-role/{id}', 'trash');
+    Route::post('delete-role/{id}', 'delete');
+    Route::post('restore-role/{id}', 'restore');
 });

@@ -13,6 +13,8 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
+    {{-- <link rel="stylesheet" href="{{ asset_path('build/assets/app.css') }}">
+    <script src="{{ asset_path('build/assets/app.js') }}"></script> --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @livewireStyles
@@ -199,7 +201,7 @@
               <div
                 class="relative mt-1 flex flex-wrap items-center gap-x-1.5 before:absolute before:-start-px before:top-1/2 before:block before:h-4 before:w-px before:-translate-y-1/2 before:bg-gray-300 dark:before:bg-gray-700 md:ms-1.5 md:mt-0 md:ps-2.5">
                 <a class="flex w-full items-center p-2 text-sm text-gray-800 hover:text-gray-500 focus:text-gray-500 focus:outline-none dark:text-gray-200 dark:hover:text-gray-500 dark:focus:text-gray-500"
-                  @auth {{ route('login') }} @else href="{{ route('dashboard.index') }}" @endauth>
+                  @auth href="{{ route('login') }}" @else href="{{ route('dashboard.index') }}" @endauth>
                   <svg class="size-4 me-3 shrink-0 md:me-2" xmlns="http://www.w3.org/2000/svg" width="24"
                     height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">

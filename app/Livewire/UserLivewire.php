@@ -87,6 +87,7 @@ class UserLivewire extends Component
 
         $this->validate();
 
+        DB::beginTransaction();
         try {
             $filename = null;
             if ($this->profile_picture) {
@@ -102,6 +103,14 @@ class UserLivewire extends Component
                 'password' => $this->password ? Hash::make($this->password) : $this->user->password,
                 'profile_photo_path' => $this->profile_picture ? 'storage/users/' . $filename  : $this->user->profile_photo_path,
             ]);
+
+            if(!$this->user) {
+                $this->name = null;
+                $this->email = null;
+                $this->profile_picture = null;
+                $this->password = null;
+            }
+
             DB::commit();
             $user->roles()->sync($this->roles);
             $this->dispatch('refreshDatatable');

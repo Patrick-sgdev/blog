@@ -8,6 +8,8 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    {{-- <link rel="stylesheet" href="{{ asset_path('build/assets/app.css') }}">
+    <script src="{{ asset_path('build/assets/app.js') }}"></script> --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset_path('post.css') }}">
     @livewireStyles

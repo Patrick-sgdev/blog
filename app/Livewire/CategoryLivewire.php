@@ -20,7 +20,7 @@ class CategoryLivewire extends Component
     {
         if (hasRole('administrator')) {
             $category->delete();    
-            Cache::forget('categories');
+            Cache::forget('categories-'. auth()->user()->id);
             $this->dispatch('refreshDatatable');
             $this->dispatch('showToastAlert', [
                 'icon' => 'success',
@@ -31,7 +31,7 @@ class CategoryLivewire extends Component
 
         if (hasRole('author') && $category->user_id == auth()->user()->id) {
             $category->delete();    
-            Cache::forget('categories');
+            Cache::forget('categories-'. auth()->user()->id);
             $this->dispatch('refreshDatatable');
             $this->dispatch('showToastAlert', [
                 'icon' => 'success',
@@ -81,7 +81,13 @@ class CategoryLivewire extends Component
             'name' => $this->name,
             'description' => $this->description,
         ]);
-        Cache::forget('categories');
+
+        if(!$this->category) {
+            $this->name = null;
+            $this->description = null;
+        }
+
+        Cache::forget('categories-'. auth()->user()->id);
         $this->dispatch('refreshDatatable');
         $this->dispatch('showToastAlert', [
             'icon' => 'success',

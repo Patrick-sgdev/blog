@@ -28,7 +28,7 @@ class RoleLivewire extends Component
             }
             
             $role->delete();
-            Cache::forget('roles');
+            Cache::forget('roles-'. auth()->user()->id);
             $this->dispatch('refreshDatatable');
             $this->dispatch('showToastAlert', [
                 'icon' => 'success',
@@ -77,7 +77,13 @@ class RoleLivewire extends Component
             'name' => $this->name,
             'description' => $this->description,
         ]);
-        Cache::forget('roles');
+
+        if(!$this->role) {
+            $this->name = null;
+            $this->description = null;
+        }
+        
+        Cache::forget('roles-'. auth()->user()->id);
 
         $this->dispatch('refreshDatatable');
         $this->dispatch('showToastAlert', [

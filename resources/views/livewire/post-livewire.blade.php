@@ -114,7 +114,7 @@
       <label for="hs-validation-name-error-categories"
         class="mb-2 block text-sm font-medium dark:text-white">{{ trans('Select one or more categories') }} <span
           class="text-red-500">*</span></label>
-      <select wire:model.live="categories" multiple=""
+      <select wire:model.live="categories" multiple="" id="select-categories"
         data-hs-select='{
             "placeholder": "Select multiple options...",
             "toggleTag": "<button type=\"button\" aria-expanded=\"false\"></button>",
@@ -291,6 +291,10 @@
       content_css: useDarkMode ? 'dark' : 'default',
       content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
     });
+
+    window.addEventListener('clear-content', function () {
+      tinymce.activeEditor.setContent("");
+    })
 
     const saveButton = document.getElementById('save-content');
 

@@ -50,14 +50,14 @@ class PostLivewire extends Component
 
     public function getCategories()
     {
-        return Cache::remember('categories', 60, function () {
+        return Cache::remember('categories-'.auth()->user()->id, 60, function () {
             return Category::select('id', 'name')->get();
         });
     }
 
     public function getTags()
     {
-        return Cache::remember('tags', 60, function () {
+        return Cache::remember('tags-'.auth()->user()->id, 60, function () {
             return Tag::select('id', 'name')->get();
         });
     }
@@ -88,6 +88,7 @@ class PostLivewire extends Component
             $this->banner->storeAs('public/posts/banner/', $filename);
         }
         
+        DB::beginTransaction();
         try {
             $post = Post::updateOrCreate(attributes: [
                 'id' => $this->post?->id
@@ -109,6 +110,10 @@ class PostLivewire extends Component
                 $post->tags()->sync($this->tags);
             }
             DB::commit();
+            if(!$this->post) {
+                $this->resetFields();
+            }
+            
             $this->dispatch('refreshDatatable');
             $this->dispatch('showToastAlert', [
                 'icon' => 'success',
@@ -150,6 +155,20 @@ class PostLivewire extends Component
             'message' => trans('You do not have permission to perform this action'),
         ]);
 
+    }
+
+    public function resetFields() 
+    {
+        $this->dispatch('clear-content');
+        $this->title = null;
+        $this->banner = null;
+        $this->short_description = null;
+        $this->content = null;
+        $this->status = 'draft';
+        $this->tags = null;
+        $this->categories = null;
+        $this->categoriesArray = $this->getCategories();
+        $this->tagsArray = $this->getTags();
     }
 
     public function render()

@@ -20,7 +20,7 @@ class TagLivewire extends Component
     {
         if (hasRole('administrator')) {
             $tag->delete();
-            Cache::forget('tags');
+            Cache::forget('tags-'.auth()->user()->id);
             $this->dispatch('refreshDatatable');
             $this->dispatch('showToastAlert', [
                 'icon' => 'success',
@@ -31,7 +31,7 @@ class TagLivewire extends Component
 
         if (hasRole('author') && $tag->user_id == auth()->user()->id) {
             $tag->delete();
-            Cache::forget('tags');
+            Cache::forget('tags-'.auth()->user()->id);
             $this->dispatch('refreshDatatable');
             $this->dispatch('showToastAlert', [
                 'icon' => 'success',
@@ -81,7 +81,13 @@ class TagLivewire extends Component
             'name' => $this->name,
             'description' => $this->description,
         ]);
-        Cache::forget('tags');
+        
+        if(!$this->tag) {
+            $this->name = null;
+            $this->description = null;
+        }
+
+        Cache::forget('tags-'.auth()->user()->id);
         $this->dispatch('refreshDatatable');
         $this->dispatch('showToastAlert', [
             'icon' => 'success',
