@@ -16,11 +16,7 @@ class RoleController extends Controller
 
     public function __construct(Request $request)
     {
-        $userToken = UserToken::where('public_token', $request->public_token)->first();
-
-        if ($userToken && Hash::check($request->secret_token, $userToken->secret_token)) {
-            $this->user = $userToken->user;
-        }
+        $this->user = auth()->user();
     }
 
     public function roles()

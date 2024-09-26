@@ -2,6 +2,7 @@
 
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Web\TagController;
 use App\Http\Controllers\Web\PostController;
 use App\Http\Controllers\Web\RoleController;
@@ -67,4 +68,7 @@ Route::middleware([
         Route::get('user/{user}', 'edit')->name('dashboard.user');
     });
 
+    Route::get('linkstorage', function () {
+        Artisan::call('storage:link');
+    });
 });

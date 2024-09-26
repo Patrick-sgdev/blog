@@ -20,7 +20,7 @@ class PostResource extends JsonResource
             'slug' => $this->slug,
             'title' => $this->title,
             'short_description' => $this->short_description,
-            'banner' => $this->banner,
+            'banner' => asset_path($this->banner),
             'status' => $this->status,
             'content' => $this->content,
             'categories' => $this->categories->pluck('name')->toArray(),

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Role;
 use App\Models\User;
 use App\Models\UserToken;
 use Illuminate\Support\Str;
@@ -20,30 +21,22 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if($credentials->fails()) {
+        if ($credentials->fails()) {
             return response()->json([
                 'status' => 'error',
                 'message' => trans('The provided credentials do not match our records.'),
             ]);
         }
- 
+
         if (Auth::attempt(['email' => strtolower($request->email), 'password' => $request->password])) {
 
             $user = User::where("email", strtolower($request->email))->first();
-            
-            $public_token = Str::random(18);
-            $secret_token = Str::random(128);
-            UserToken::create([
-                'secret_token' => Hash::make($secret_token),
-                'user_id' => $user->id,
-                'public_token' => $public_token,
-            ]);
+            $token = $user->createToken($request->token_name ?? $request->ip(), [implode(',', $user->roles->pluck('name')->toArray())]);
 
             return response()->json([
                 'status' => 'success',
                 'message' => trans('You have been successfully authenticated'),
-                'public_token' => $public_token,
-                'secret_token' => $secret_token,
+                'token' => $token->plainTextToken
             ]);
         }
 
@@ -53,8 +46,37 @@ class AuthController extends Controller
         ]);
     }
 
-    public function register()
+    public function register(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'min:2', 'max:30'],
+            'email' => ['required', 'email', 'unique:users,email'],
+            'password' => ['required', 'min:6', 'max:36'],
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => '',
+                'status' => 'error',
+                'data' => $validator->messages()->get('*'),
+                'type' => 'validation'
+            ]);
+        }
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password)
+        ]);
+
+        $user->roles()->sync([Role::where('name', 'author')->pluck('id')->first()]);
+        
+        $token = $user->createToken($request->token_name ?? $request->ip(), [implode(',', $user->roles->pluck('name')->toArray())]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => trans('You have been successfully registered'),
+            'token' => $token->plainTextToken
+        ]);
     }
 }
