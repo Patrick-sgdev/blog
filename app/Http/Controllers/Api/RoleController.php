@@ -52,6 +52,39 @@ class RoleController extends Controller
         ], 200);
     }
 
+    public function rolesTrashed()
+    {
+        if (!hasRole('administrator', $this->user)) {
+            return response()->json([
+                'message' => trans('You do not have permission to perform this action.'),
+                'status' => 'error',
+                'data' => [],
+                'type' => 'unauthorized'
+            ], 401);
+        }
+
+        $data = [];
+
+        if (hasRole('administrator', $this->user)) {
+            $data = Role::onlyTrashed()->orderBy('name')->select('id', 'name', 'description')->paginate(10);
+        }
+
+        return response()->json([
+            'message' => '',
+            'status' => 'success',
+            'data' => CategoryTagResource::collection($data),
+            'pagination' => [
+                'current_page' => $data->currentPage(),
+                'last_page' => $data->lastPage(),
+                'per_page' => $data->perPage(),
+                'total' => $data->total(),
+                'next_page_url' => $data->nextPageUrl(),
+                'prev_page_url' => $data->previousPageUrl(),
+            ],
+            'type' => '',
+        ], 200);
+    }
+
     public function role($id)
     {
         if (!hasRole('administrator', $this->user)) {
@@ -208,15 +241,6 @@ class RoleController extends Controller
     public function restore(Role $role)
     {
         if(hasRole('administrator', $this->user)) {
-            if(in_array($role->name, ['author', 'administrator'])) {
-                return response()->json([
-                    'message' => trans('This is a core role of the system and cannot be deleted.'),
-                    'status' => 'error',
-                    'data' => [],
-                    'type' => ''
-                ]);
-            }
-
             $role->restore();
             return response()->json([
                 'message' => trans('Role was restored.'),

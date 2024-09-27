@@ -194,4 +194,94 @@ class TagController extends Controller
             ]);
         }
     }
+
+    public function trash(Tag $tag)
+    {
+        if(hasRole('administrator', $this->user)) {
+            $tag->delete();
+            return response()->json([
+                'message' => trans('Tag successfully removed but it still can be restored.'),
+                'status' => 'error',
+                'data' => [],
+                'type' => ''
+            ]);
+        }
+
+        if(hasRole('author', $this->user) && $tag->user_id == $this->user->id) {
+            $tag->delete();
+            return response()->json([
+                'message' => trans('Tag successfully removed but it still can be restored.'),
+                'status' => 'error',
+                'data' => [],
+                'type' => ''
+            ]);
+        }
+
+        return response()->json([
+            'message' => trans('You do not have permission to perform this action.'),
+            'status' => 'error',
+            'data' => [],
+            'type' => 'unauthorized'
+        ], 401);
+    }
+
+    public function restore(Tag $tag)
+    {
+        if(hasRole('administrator', $this->user)) {
+            $tag->restore();
+            return response()->json([
+                'message' => trans('Tag was restored.'),
+                'status' => 'error',
+                'data' => $tag,
+                'type' => ''
+            ]);
+        }
+
+        if(hasRole('author', $this->user) && $this->user->id == $tag->user_id) {
+            $tag->restore();
+            return response()->json([
+                'message' => trans('Tag was restored.'),
+                'status' => 'error',
+                'data' => $tag,
+                'type' => ''
+            ]);
+        }
+
+        return response()->json([
+            'message' => trans('You do not have permission to perform this action.'),
+            'status' => 'error',
+            'data' => [],
+            'type' => 'unauthorized'
+        ], 401);
+    }
+
+    public function delete(Tag $tag)
+    {
+        if(hasRole('administrator', $this->user)) {
+            $tag->forceDelete();
+            return response()->json([
+                'message' => trans('Tag was permanently removed.'),
+                'status' => 'error',
+                'data' => [],
+                'type' => ''
+            ]);
+        }
+
+        if(hasRole('author', $this->user) && $this->user->id == $tag->user_id) {
+            $tag->forceDelete();
+            return response()->json([
+                'message' => trans('Tag was permanently removed.'),
+                'status' => 'error',
+                'data' => [],
+                'type' => ''
+            ]);
+        }
+
+        return response()->json([
+            'message' => trans('You do not have permission to perform this action.'),
+            'status' => 'error',
+            'data' => [],
+            'type' => 'unauthorized'
+        ], 401);
+    }
 }

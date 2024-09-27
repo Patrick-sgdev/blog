@@ -284,4 +284,95 @@ class PostController extends Controller
             }
         });
     }
+
+    public function trash(Post $post)
+    {
+        if(hasRole('administrator', $this->user)) {
+            $post->delete();
+            return response()->json([
+                'message' => trans('Post successfully removed but it still can be restored.'),
+                'status' => 'error',
+                'data' => [],
+                'type' => ''
+            ]);
+        }
+
+        if(hasRole('author', $this->user) && $post->user_id == $this->user->id) {
+            $post->delete();
+            return response()->json([
+                'message' => trans('Post successfully removed but it still can be restored.'),
+                'status' => 'error',
+                'data' => [],
+                'type' => ''
+            ]);
+        }
+
+        return response()->json([
+            'message' => trans('You do not have permission to perform this action.'),
+            'status' => 'error',
+            'data' => [],
+            'type' => 'unauthorized'
+        ], 401);
+    }
+
+    public function restore(Post $post)
+    {
+        if(hasRole('administrator', $this->user)) {
+            $post->restore();
+            return response()->json([
+                'message' => trans('Post was restored.'),
+                'status' => 'error',
+                'data' => $post,
+                'type' => ''
+            ]);
+        }
+
+        if(hasRole('author', $this->user) && $this->user->id == $post->user_id) {
+            $post->restore();
+            return response()->json([
+                'message' => trans('Post was restored.'),
+                'status' => 'error',
+                'data' => $post,
+                'type' => ''
+            ]);
+        }
+
+        return response()->json([
+            'message' => trans('You do not have permission to perform this action.'),
+            'status' => 'error',
+            'data' => [],
+            'type' => 'unauthorized'
+        ], 401);
+    }
+
+    public function delete(Post $post)
+    {
+        if(hasRole('administrator', $this->user)) {
+            $post->forceDelete();
+            return response()->json([
+                'message' => trans('Post was permanently removed.'),
+                'status' => 'error',
+                'data' => [],
+                'type' => ''
+            ]);
+        }
+
+        if(hasRole('author', $this->user) && $this->user->id == $post->user_id) {
+            $post->forceDelete();
+            return response()->json([
+                'message' => trans('Post was permanently removed.'),
+                'status' => 'error',
+                'data' => [],
+                'type' => ''
+            ]);
+        }
+
+        return response()->json([
+            'message' => trans('You do not have permission to perform this action.'),
+            'status' => 'error',
+            'data' => [],
+            'type' => 'unauthorized'
+        ], 401);
+    }
+
 }
