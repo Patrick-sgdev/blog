@@ -19,6 +19,8 @@ Route::controller(PostController::class)->group(function () {
     Route::get('get-posts', 'getPosts')->middleware(['checkToken']);
     Route::get('get-post/{id}', 'getPost')->middleware(['checkToken']);
     Route::get('get-post/slug/{slug}', 'getPostSlug')->middleware(['checkToken']);
+    Route::get('get-post/category/{category:slug}', 'getPostByCategorySlug')->middleware(['checkToken']);
+    Route::get('get-post/tag/{tag:slug}', 'getPostByTagSlug')->middleware(['checkToken']);
     Route::post('store-post', 'store')->name('create-post')->middleware(['checkToken']);
     Route::post('update-post/{id}', 'update')->middleware(['checkToken']);
     Route::get('get-posts-trashed', 'postsTrashed')->middleware(['checkToken']);

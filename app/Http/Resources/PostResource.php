@@ -23,8 +23,10 @@ class PostResource extends JsonResource
             'banner' => asset_path($this->banner),
             'status' => $this->status,
             'content' => $this->content,
+            'created_at' => $this->created_at->format('d/m/Y H:i'),
+            'updated_at' => $this->updated_at->format('d/m/Y H:i'),
             'categories' => $this->categories->pluck('name')->toArray(),
-            'tags' => $this->categories->pluck('name')->toArray(),
+            'tags' => $this->tags->pluck('name')->toArray(),
         ];
     }
 }

@@ -37,7 +37,9 @@ class PostController extends Controller
             ], 401);
         }
 
+
         $validator = Validator::make($request->all(), [
+            'search' => 'nullable|max:300',
             'query_operator' => 'nullable|in:and,or',
             'operator_category' => 'nullable|in:any,all',
             'operator_tags' => 'nullable|in:any,all',
@@ -60,12 +62,66 @@ class PostController extends Controller
 
         $data = [];
 
-        if (hasRole('administrator', $this->user)) {
-            $data = Post::with(['tags', 'categories'])->paginate(2);
+        $query = Post::with(['tags', 'categories']);
+
+        // Filtro por data de criação
+        if ($request->filled('created_at')) {
+            $createdAt = Carbon::createFromFormat('d/m/Y', $request->input('created_at'))->startOfDay();
+            $query->whereDate('created_at', '=', $createdAt);
         }
 
-        if (hasRole('author', $this->user) && !hasRole('administrator', $this->user)) {
-            $data = Post::with(['tags', 'categories'])->where('user_id', $this->user->id)->paginate(10);
+        // Filtro por data de atualização
+        if ($request->filled('updated_at')) {
+            $updatedAt = Carbon::createFromFormat('d/m/Y', $request->input('updated_at'))->startOfDay();
+            $query->whereDate('updated_at', '=', $updatedAt);
+        }
+
+        // Filtro por categorias
+        if ($request->filled('categories')) {
+            $categoryIds = $request->input('categories');
+
+            if ($request->input('operator_category') == 'all') {
+                $query->whereHas('categories', function ($q) use ($categoryIds) {
+                    $q->whereIn('categories.id', $categoryIds);
+                }, '=', count($categoryIds));
+            } else {
+                // Qualquer um dos IDs de categorias pode estar presente
+                $query->whereHas('categories', function ($q) use ($categoryIds) {
+                    $q->whereIn('categories.id', $categoryIds);
+                });
+            }
+        }
+
+        // Filtro por tags
+        if ($request->filled('tags')) {
+            $tagIds = $request->input('tags');
+
+            if ($request->input('operator_tags') == 'all') {
+                $query->whereHas('tags', function ($q) use ($tagIds) {
+                    $q->whereIn('tags.id', $tagIds);
+                }, '=', count($tagIds));
+            } else {
+                // Qualquer um dos IDs de tags pode estar presente
+                $query->whereHas('tags', function ($q) use ($tagIds) {
+                    $q->whereIn('tags.id', $tagIds);
+                });
+            }
+        }
+
+        //Filtro search
+        if ($request->filled('search')) {
+            $query->whereLike('title', '%' . $request->search . '%')
+                ->orWhereLike('content', '%' . $request->search . '%')
+                ->orWhereLike('short_description', '%' . $request->search . '%');
+        }
+
+        // Consultas personalizadas para o papel do usuário
+        if (hasRole('administrator', $this->user)) {
+            $data = $query->paginate(10);
+        } elseif (hasRole('author', $this->user) && !hasRole('administrator', $this->user)) {
+            $data = $query->where('user_id', $this->user->id)->paginate(10);
+        } else {
+            $data = [];
         }
 
         return response()->json([
@@ -133,6 +189,54 @@ class PostController extends Controller
         if (hasRole('author', $this->user) && !hasRole('administrator', $this->user)) {
             $data = Post::with(['tags', 'categories'])->where('slug', $slug)->where('user_id', $this->user->id)->get();
         }
+
+        return response()->json([
+            'message' => '',
+            'status' => 'success',
+            'data' => PostResource::collection($data),
+            'type' => '',
+        ], 200);
+    }
+
+    public function getPostByCategorySlug(Category $category)
+    {
+        if (!hasAnyRole(['administrator', 'author'], $this->user)) {
+            return response()->json([
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
+                'status' => 'error',
+                'data' => [],
+                'type' => 'unauthorized'
+            ], 401);
+        }
+
+        $data = Post::with(['tags', 'categories'])
+            ->whereHas('categories', function ($query) use ($category) {
+                $query->where('categories.id', $category->id); // Especifica que o 'id' é da tabela 'categories'
+            })->get();
+
+        return response()->json([
+            'message' => '',
+            'status' => 'success',
+            'data' => PostResource::collection($data),
+            'type' => '',
+        ], 200);
+    }
+
+    public function getPostByTagSlug(Tag $tag)
+    {
+        if (!hasAnyRole(['administrator', 'author'], $this->user)) {
+            return response()->json([
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
+                'status' => 'error',
+                'data' => [],
+                'type' => 'unauthorized'
+            ], 401);
+        }
+
+        $data = Post::with(['tags', 'categories'])
+            ->whereHas('tags', function ($query) use ($tag) {
+                $query->where('tags.id', $tag->id);
+            })->get();
 
         return response()->json([
             'message' => '',
