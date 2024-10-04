@@ -3,7 +3,7 @@
 
     <div class="mb-4">
       <label for="hs-validation-name-error-title"
-        class="mb-2 block text-sm font-medium dark:text-white">{{ trans('Title') }} <span
+        class="mb-2 block text-sm font-medium dark:text-white">{{ trans('Título') }} <span
           class="text-red-500">*</span></label>
       <div class="relative">
         <input type="text" id="hs-validation-name-error-title" name="hs-validation-name-error-title"
@@ -35,7 +35,7 @@
 
     <div class="mb-4">
       <label for="hs-validation-name-error-short_description"
-        class="mb-2 block text-sm font-medium dark:text-white capitalize">{{ trans('short description') }} <span
+        class="mb-2 block text-sm font-medium dark:text-white capitalize">{{ trans('Descrição curta') }} <span
           class="text-red-500">*</span></label>
       <div class="relative">
         <input type="text" id="hs-validation-name-error-short_description" name="hs-validation-name-error-short_description"
@@ -57,7 +57,7 @@
           @enderror
         </div>
       </div>
-      @error('title')
+      @error('short_description')
         <p class="mt-2 text-sm text-red-600" id="hs-validation-name-error-helper">{{ $message }}
         </p>
       @else
@@ -67,7 +67,7 @@
 
     <div class="mb-4">
       <label for="hs-validation-name-error-banner"
-        class="mb-2 block text-sm font-medium dark:text-white">{{ trans('Select a banner') }} @if(!$post) <span
+        class="mb-2 block text-sm font-medium dark:text-white">{{ trans('Escolha uma imagem') }} @if(!$post) <span
         class="text-red-500">*</span> @endif</label>
       <label for="file-input" class="sr-only">Choose file</label>
       <input type="file" name="file-input" id="file-input" wire:model.live="banner"
@@ -90,7 +90,7 @@
           class="text-red-500">*</span></label>
       <select wire:model.live="status"
         data-hs-select='{
-            "placeholder": "Select multiple options...",
+            "placeholder": "Escolha uma ou mais opções...",
             "toggleTag": "<button type=\"button\" aria-expanded=\"false\"></button>",
             "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-3 ps-4 pe-9 flex gap-x-2 text-nowrap w-full cursor-pointer bg-white border border-gray-200 rounded-lg text-start text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600",
             "dropdownClasses": "mt-2 z-50 w-full max-h-72 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-gray-700 dark:[&::-webkit-scrollbar-thumb]:bg-gray-500 dark:bg-gray-900 dark:border-gray-700",
@@ -112,11 +112,11 @@
 
     <div class="mb-4" wire:ignore>
       <label for="hs-validation-name-error-categories"
-        class="mb-2 block text-sm font-medium dark:text-white">{{ trans('Select one or more categories') }} <span
+        class="mb-2 block text-sm font-medium dark:text-white">{{ trans('Escolha uma ou mais categorias') }} <span
           class="text-red-500">*</span></label>
       <select wire:model.live="categories" multiple="" id="select-categories"
         data-hs-select='{
-            "placeholder": "Select multiple options...",
+            "placeholder": "Escolha uma ou mais opções...",
             "toggleTag": "<button type=\"button\" aria-expanded=\"false\"></button>",
             "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-3 ps-4 pe-9 flex gap-x-2 text-nowrap w-full cursor-pointer bg-white border border-gray-200 rounded-lg text-start text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600",
             "dropdownClasses": "mt-2 z-50 w-full max-h-72 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-gray-700 dark:[&::-webkit-scrollbar-thumb]:bg-gray-500 dark:bg-gray-900 dark:border-gray-700",
@@ -139,10 +139,10 @@
 
     <div class="mb-4" wire:ignore>
       <label for="hs-validation-name-error-tags"
-        class="mb-2 block text-sm font-medium dark:text-white">{{ trans('Select one or more tags') }}</label>
+        class="mb-2 block text-sm font-medium dark:text-white">{{ trans('Escolha uma ou mais tags') }}</label>
       <select wire:model.live="tags" multiple=""
         data-hs-select='{
-            "placeholder": "Select multiple options...",
+            "placeholder": "Escolha uma ou mais opções...",
             "toggleTag": "<button type=\"button\" aria-expanded=\"false\"></button>",
             "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-3 ps-4 pe-9 flex gap-x-2 text-nowrap w-full cursor-pointer bg-white border border-gray-200 rounded-lg text-start text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600",
             "dropdownClasses": "mt-2 z-50 w-full max-h-72 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-gray-700 dark:[&::-webkit-scrollbar-thumb]:bg-gray-500 dark:bg-gray-900 dark:border-gray-700",
@@ -175,8 +175,8 @@
       <button type="button"
         class="float-right inline-flex items-center gap-x-2 rounded-lg border border-transparent bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:bg-blue-700 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
         id="save-content" wire:loading.class="pointer-events-none opacity-50">
-        <span wire:loading.remove>{{ trans('Save') }}</span>
-        <span wire:loading>{{ trans('Loading...') }}</span>
+        <span wire:loading.remove>{{ trans('Salvar') }}</span>
+        <span wire:loading>{{ trans('Carregando...') }}</span>
       </button>
     </div>
   </div>

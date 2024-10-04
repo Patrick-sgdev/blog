@@ -24,7 +24,7 @@ class TagLivewire extends Component
             $this->dispatch('refreshDatatable');
             $this->dispatch('showToastAlert', [
                 'icon' => 'success',
-                'message' => trans('Tag successfully deleted.'),
+                'message' => trans('Tag removida com sucesso.'),
             ]);
             return;
         }
@@ -35,14 +35,14 @@ class TagLivewire extends Component
             $this->dispatch('refreshDatatable');
             $this->dispatch('showToastAlert', [
                 'icon' => 'success',
-                'message' => trans('Tag successfully deleted.'),
+                'message' => trans('Tag removida com sucesso.'),
             ]);
             return;
         }
 
         $this->dispatch('showToastAlert', [
             'icon' => 'error',
-            'message' => trans('You do not have permission to perform this action'),
+            'message' => trans('Você não possui permissão para realizar essa ação'),
         ]);
 
     }
@@ -68,7 +68,7 @@ class TagLivewire extends Component
         if(!hasRole('author') && !hasRole('administrator')) {
             $this->dispatch('showToastAlert', [
                 'icon' => 'error',
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
             ]);
         }
 
@@ -91,7 +91,7 @@ class TagLivewire extends Component
         $this->dispatch('refreshDatatable');
         $this->dispatch('showToastAlert', [
             'icon' => 'success',
-            'message' => $this->tag ? trans('Tag successfully updated.') : trans('Tag successfully created'),
+            'message' => $this->tag ? trans('Tag atualizada com sucesso.') : trans('Tag criada com sucesso.'),
         ]);
     }
     public function render()

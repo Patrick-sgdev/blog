@@ -9,7 +9,7 @@
       <path d="M2 12H22" />
     </svg>
 
-    {{ trans('back to roles') }}
+    {{ trans('voltar para funções') }}
 
   </a>
 

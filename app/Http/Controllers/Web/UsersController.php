@@ -13,6 +13,11 @@ class UsersController extends Controller
         return view('dashboard.users.index');
     }
 
+    public function settings()
+    {
+        return view('dashboard.settings');
+    }
+
     public function edit(User $user)
     {
         return view(view: 'dashboard.users.edit')->with([

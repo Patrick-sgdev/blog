@@ -117,7 +117,7 @@ class PostLivewire extends Component
             $this->dispatch('refreshDatatable');
             $this->dispatch('showToastAlert', [
                 'icon' => 'success',
-                'message' => $this->post ? trans('Post successfully updated.') : trans('Post successfully created'),
+                'message' => $this->post ? trans('Publicação atualizada com sucesso.') : trans('Publicação criada com sucesso.'),
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -135,7 +135,7 @@ class PostLivewire extends Component
             $this->dispatch('refreshDatatable');
             $this->dispatch('showToastAlert', [
                 'icon' => 'success',
-                'message' => trans('Post successfully deleted.'),
+                'message' => trans('Publicação removida com sucesso.'),
             ]);
             return;
         }
@@ -145,14 +145,14 @@ class PostLivewire extends Component
             $this->dispatch('refreshDatatable');
             $this->dispatch('showToastAlert', [
                 'icon' => 'success',
-                'message' => trans('Post successfully deleted.'),
+                'message' => trans('Publicação removida com sucesso.'),
             ]);
             return;
         }
 
         $this->dispatch('showToastAlert', [
             'icon' => 'error',
-            'message' => trans('You do not have permission to perform this action'),
+            'message' => trans('Você não possui permissão para realizar essa ação'),
         ]);
 
     }

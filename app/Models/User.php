@@ -85,6 +85,11 @@ class User extends Authenticatable
         return $has;
     }
 
+    public function token()
+    {
+        return $this->hasOne(UserToken::class);
+    }
+
     public function tags()
     {
         return $this->hasMany(Tag::class);

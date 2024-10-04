@@ -8,6 +8,7 @@ use App\Models\UserToken;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\CategoryTagResource;
@@ -18,18 +19,14 @@ class CategoryController extends Controller
 
     public function __construct(Request $request)
     {
-        $userToken = UserToken::where('public_token', $request->public_token)->first();
-
-        if ($userToken && Hash::check($request->secret_token, $userToken->secret_token)) {
-            $this->user = $userToken->user;
-        }
+        $this->user = Auth::user();
     }
 
     public function categories()
     {
         if (!hasAnyRole(['administrator', 'author'], $this->user)) {
             return response()->json([
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
                 'status' => 'error',
                 'data' => [],
                 'type' => 'unauthorized'
@@ -69,7 +66,7 @@ class CategoryController extends Controller
     {
         if (!hasAnyRole(['administrator', 'author'], $this->user)) {
             return response()->json([
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
                 'status' => 'error',
                 'data' => [],
                 'type' => 'unauthorized'
@@ -109,7 +106,7 @@ class CategoryController extends Controller
     {
         if (!hasAnyRole(['administrator', 'author'], $this->user)) {
             return response()->json([
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
                 'status' => 'error',
                 'data' => [],
                 'type' => 'unauthorized'
@@ -143,7 +140,7 @@ class CategoryController extends Controller
     {
         if (!hasAnyRole(['administrator', 'author'], $this->user)) {
             return response()->json([
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
                 'status' => 'error',
                 'data' => [],
                 'type' => 'unauthorized'
@@ -194,7 +191,7 @@ class CategoryController extends Controller
     {
         if (!hasAnyRole(['administrator', 'author'], $this->user)) {
             return response()->json([
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
                 'status' => 'error',
                 'data' => [],
                 'type' => 'unauthorized'
@@ -261,7 +258,7 @@ class CategoryController extends Controller
         }
 
         return response()->json([
-            'message' => trans('You do not have permission to perform this action.'),
+            'message' => trans('Você não possui permissão para realizar essa ação.'),
             'status' => 'error',
             'data' => [],
             'type' => 'unauthorized'
@@ -291,7 +288,7 @@ class CategoryController extends Controller
         }
 
         return response()->json([
-            'message' => trans('You do not have permission to perform this action.'),
+            'message' => trans('Você não possui permissão para realizar essa ação.'),
             'status' => 'error',
             'data' => [],
             'type' => 'unauthorized'
@@ -321,7 +318,7 @@ class CategoryController extends Controller
         }
 
         return response()->json([
-            'message' => trans('You do not have permission to perform this action.'),
+            'message' => trans('Você não possui permissão para realizar essa ação.'),
             'status' => 'error',
             'data' => [],
             'type' => 'unauthorized'

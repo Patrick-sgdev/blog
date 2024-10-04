@@ -24,7 +24,7 @@ class CategoryLivewire extends Component
             $this->dispatch('refreshDatatable');
             $this->dispatch('showToastAlert', [
                 'icon' => 'success',
-                'message' => trans('Category successfully deleted.'),
+                'message' => trans('Categoria removida com sucesso.'),
             ]);
             return;
         }
@@ -35,14 +35,14 @@ class CategoryLivewire extends Component
             $this->dispatch('refreshDatatable');
             $this->dispatch('showToastAlert', [
                 'icon' => 'success',
-                'message' => trans('Category successfully deleted.'),
+                'message' => trans('Categoria removida com sucesso.'),
             ]);
             return;
         }
 
         $this->dispatch('showToastAlert', [
             'icon' => 'error',
-            'message' => trans('You do not have permission to perform this action'),
+            'message' => trans('Você não possui permissão para realizar essa ação'),
         ]);
 
     }
@@ -68,7 +68,7 @@ class CategoryLivewire extends Component
         if(!hasRole('author') && !hasRole('administrator')) {
             $this->dispatch('showToastAlert', [
                 'icon' => 'error',
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
             ]);
         }
         
@@ -91,7 +91,7 @@ class CategoryLivewire extends Component
         $this->dispatch('refreshDatatable');
         $this->dispatch('showToastAlert', [
             'icon' => 'success',
-            'message' => $this->category ? trans('Category successfully updated.') : trans('Category successfully created'),
+            'message' => $this->category ? trans('Categoria atualizada com sucesso.') : trans('Categoria criada com sucesso.'),
         ]);
     }
 

@@ -9,7 +9,7 @@
       <path d="M2 12H22" />
     </svg>
 
-    {{ trans('back to users') }}
+    {{ trans('voltar para usuários') }}
 
   </a>
 

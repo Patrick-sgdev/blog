@@ -22,7 +22,7 @@ class RoleLivewire extends Component
             if(in_array($role->name, ['author', 'administrator'])) {
                 $this->dispatch('showToastAlert', [
                     'icon' => 'error',
-                    'message' => trans('This is a core role of the system and cannot be deleted.'),
+                    'message' => trans('Esta é uma função central do sistema e não pode ser excluída.'),
                 ]);
                 return;
             }
@@ -32,14 +32,14 @@ class RoleLivewire extends Component
             $this->dispatch('refreshDatatable');
             $this->dispatch('showToastAlert', [
                 'icon' => 'success',
-                'message' => trans('Role successfully deleted.'),
+                'message' => trans('Função removida com sucesso.'),
             ]);
             return;
         }
 
         $this->dispatch('showToastAlert', [
             'icon' => 'error',
-            'message' => trans('You do not have permission to perform this action.'),
+            'message' => trans('Você não possui permissão para realizar essa ação.'),
         ]);
 
     }
@@ -65,7 +65,7 @@ class RoleLivewire extends Component
         if(!hasRole('administrator')) {
             $this->dispatch('showToastAlert', [
                 'icon' => 'error',
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
             ]);
         }
 
@@ -88,7 +88,7 @@ class RoleLivewire extends Component
         $this->dispatch('refreshDatatable');
         $this->dispatch('showToastAlert', [
             'icon' => 'success',
-            'message' => $this->role ? trans('Role successfully updated.') : trans('Role successfully created'),
+            'message' => $this->role ? trans('Função atualizada com sucesso.') : trans('Função criada com sucesso.'),
         ]);
     }
     public function render()

@@ -23,7 +23,7 @@ class RoleController extends Controller
     {
         if (!hasRole('administrator', $this->user)) {
             return response()->json([
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
                 'status' => 'error',
                 'data' => [],
                 'type' => 'unauthorized'
@@ -56,7 +56,7 @@ class RoleController extends Controller
     {
         if (!hasRole('administrator', $this->user)) {
             return response()->json([
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
                 'status' => 'error',
                 'data' => [],
                 'type' => 'unauthorized'
@@ -89,7 +89,7 @@ class RoleController extends Controller
     {
         if (!hasRole('administrator', $this->user)) {
             return response()->json([
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
                 'status' => 'error',
                 'data' => [],
                 'type' => 'unauthorized'
@@ -116,7 +116,7 @@ class RoleController extends Controller
     {
         if (!hasAnyRole(['administrator', 'author'], $this->user)) {
             return response()->json([
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
                 'status' => 'error',
                 'data' => [],
                 'type' => 'unauthorized'
@@ -165,7 +165,7 @@ class RoleController extends Controller
     {
         if (!hasRole('administrator', $this->user)) {
             return response()->json([
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
                 'status' => 'error',
                 'data' => [],
                 'type' => 'unauthorized'
@@ -231,7 +231,7 @@ class RoleController extends Controller
         }
 
         return response()->json([
-            'message' => trans('You do not have permission to perform this action.'),
+            'message' => trans('Você não possui permissão para realizar essa ação.'),
             'status' => 'error',
             'data' => [],
             'type' => 'unauthorized'
@@ -251,7 +251,7 @@ class RoleController extends Controller
         }
 
         return response()->json([
-            'message' => trans('You do not have permission to perform this action.'),
+            'message' => trans('Você não possui permissão para realizar essa ação.'),
             'status' => 'error',
             'data' => [],
             'type' => 'unauthorized'
@@ -280,7 +280,7 @@ class RoleController extends Controller
         }
 
         return response()->json([
-            'message' => trans('You do not have permission to perform this action.'),
+            'message' => trans('Você não possui permissão para realizar essa ação.'),
             'status' => 'error',
             'data' => [],
             'type' => 'unauthorized'

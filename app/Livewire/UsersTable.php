@@ -20,18 +20,18 @@ class UsersTable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable(),
-            Column::make(trans("Name"), "name")
+            Column::make(trans("Nome"), "name")
                 ->sortable(),
             Column::make("Email", "email")
                 ->sortable(),
-                Column::make(trans("Roles"), "roles.name")
+                Column::make(trans("Funções"), "roles.name")
                 ->label(function($row) {
                     return $row->roles->pluck('name')->join(', ');
                 })
                 ->sortable(),
-            Column::make("Created at", "created_at")
+            Column::make(trans('Criado em'), "created_at")
                 ->sortable(),
-                Column::make(trans('actions'))
+                Column::make(trans('Ações'))
                 ->label(fn($row, Column $column) => view('components.table.users.actions')->withValue($row->id)),
         ];
     }

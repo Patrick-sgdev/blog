@@ -35,15 +35,15 @@ class TagsTable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable(),
-            Column::make(trans('Name'), "name")
+            Column::make(trans('Nome'), "name")
                 ->sortable()
                 ->searchable(),
-            Column::make(trans('Description'), "description")
+            Column::make(trans('Descrição'), "description")
                 ->sortable()
                 ->searchable(),
-            Column::make("Created at", "created_at")
+            Column::make(trans('Criado em'), "created_at")
                 ->sortable(),
-            Column::make(trans('actions'))
+            Column::make(trans('Ações'))
                 ->label(fn($row, Column $column) => view('components.table.tags.actions')->withValue($row->id)),
         ];
     }

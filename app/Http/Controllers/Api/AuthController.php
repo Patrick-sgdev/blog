@@ -31,12 +31,30 @@ class AuthController extends Controller
         if (Auth::attempt(['email' => strtolower($request->email), 'password' => $request->password])) {
 
             $user = User::where("email", strtolower($request->email))->first();
-            $token = $user->createToken($request->token_name ?? $request->ip(), [implode(',', $user->roles->pluck('name')->toArray())]);
 
             return response()->json([
                 'status' => 'success',
                 'message' => trans('You have been successfully authenticated'),
-                'token' => $token->plainTextToken
+                'token' => $user->token ? $user->token->token : UserToken::updateOrCreate(['user_id' => $user->id, 'token' => fake()->uuid()])->token
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => trans('The provided credentials do not match our records.'),
+        ]);
+    }
+
+    public function rotateKey(Request $request)
+    {
+        if (Auth::check()) {
+            auth()->user()->token->token = fake()->uuid();
+            auth()->user()->token->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => trans('You have been successfully authenticated'),
+                'token' => auth()->user()->token->token
             ]);
         }
 
@@ -70,13 +88,16 @@ class AuthController extends Controller
         ]);
 
         $user->roles()->sync([Role::where('name', 'author')->pluck('id')->first()]);
-        
-        $token = $user->createToken($request->token_name ?? $request->ip(), [implode(',', $user->roles->pluck('name')->toArray())]);
+
+        $token = UserToken::create([
+            'token' => fake()->uuid(),
+            'user_id' => $user->id
+        ]);
 
         return response()->json([
             'status' => 'success',
             'message' => trans('You have been successfully registered'),
-            'token' => $token->plainTextToken
+            'token' => $token->token
         ]);
     }
 }

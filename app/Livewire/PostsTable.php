@@ -38,16 +38,16 @@ class PostsTable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable(),
-            Column::make(trans('Author'), 'author.name'),
-            Column::make(trans('Title'), "title")
+            Column::make(trans('Autor'), 'author.name'),
+            Column::make(trans('Título'), "title")
                 ->sortable()
                 ->searchable(),
             Column::make(trans('Status'), "status")
                 ->sortable()
                 ->searchable(),
-            Column::make(trans('Created at'), "created_at")
+            Column::make(trans('Criado em'), "created_at")
                 ->sortable(),
-            Column::make(trans('actions'))
+            Column::make(trans('Ações'))
                 ->label(fn($row, Column $column) => view('components.table.posts.actions')->withValue($row->id)),
         ];
     }

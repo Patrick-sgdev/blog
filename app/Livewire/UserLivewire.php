@@ -35,14 +35,14 @@ class UserLivewire extends Component
             $this->dispatch('refreshDatatable');
             $this->dispatch('showToastAlert', [
                 'icon' => 'success',
-                'message' => trans('User successfully deleted.'),
+                'message' => trans('Usuário deletado com sucesso.'),
             ]);
             return;
         }
 
         $this->dispatch('showToastAlert', [
             'icon' => 'error',
-            'message' => trans('You do not have permission to perform this action'),
+            'message' => trans('Você não possui permissão para realizar essa ação'),
         ]);
 
     }
@@ -81,7 +81,7 @@ class UserLivewire extends Component
         if (!hasRole('administrator')) {
             $this->dispatch('showToastAlert', [
                 'icon' => 'error',
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
             ]);
         }
 
@@ -116,7 +116,7 @@ class UserLivewire extends Component
             $this->dispatch('refreshDatatable');
             $this->dispatch('showToastAlert', [
                 'icon' => 'success',
-                'message' => $this->user ? trans('User successfully updated.') : trans('User successfully created'),
+                'message' => $this->user ? trans('Usuário atualizado com sucesso.') : trans('Usuário criado com sucesso.'),
             ]);
 
         } catch (\Throwable $th) {

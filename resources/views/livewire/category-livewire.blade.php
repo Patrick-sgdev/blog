@@ -2,7 +2,7 @@
   <div class="py-2">
     <div class="mb-4">
       <label for="hs-validation-name-error-name"
-        class="mb-2 block text-sm font-medium capitalize dark:text-white">{{ trans('name') }}<span
+        class="mb-2 block text-sm font-medium capitalize dark:text-white">{{ trans('nome') }}<span
           class="text-red-500">*</span></label>
       <div class="relative">
         <input type="text" id="hs-validation-name-error-name" name="hs-validation-name-error-name"
@@ -33,7 +33,7 @@
     </div>
     <div class="mb-4">
       <label for="hs-validation-name-error-description"
-        class="mb-2 block text-sm font-medium dark:text-white">{{ trans('Description') }}</label>
+        class="mb-2 block text-sm font-medium dark:text-white">{{ trans('Descrição') }}</label>
       <div class="relative">
         <input type="text" id="hs-validation-name-error-description" name="hs-validation-name-error-description"
           @class([
@@ -65,8 +65,8 @@
     <button type="button"
       class="float-right inline-flex items-center gap-x-2 rounded-lg border border-transparent bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:bg-blue-700 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
       id="save-content" wire:click="store" wire:loading.class="pointer-events-none opacity-50">
-      <span wire:loading.remove>{{ trans('Save') }}</span>
-      <span wire:loading>{{ trans('Loading...') }}</span>
+      <span wire:loading.remove>{{ trans('Salvar') }}</span>
+      <span wire:loading>{{ trans('Carregando...') }}</span>
     </button>
   </div>
 </div>

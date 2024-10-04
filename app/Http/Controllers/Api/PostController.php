@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use App\Models\Tag;
 use App\Models\Post;
 use App\Models\Category;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
@@ -21,22 +23,39 @@ class PostController extends Controller
 
     public function __construct(Request $request)
     {
-        $userToken = UserToken::where('public_token', $request->public_token)->first();
-
-        if ($userToken && Hash::check($request->secret_token, $userToken->secret_token)) {
-            $this->user = $userToken->user;
-        }
+        $this->user = Auth::user();
     }
 
-    public function getPosts()
+    public function getPosts(Request $request)
     {
         if (!hasAnyRole(['administrator', 'author'], $this->user)) {
             return response()->json([
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
                 'status' => 'error',
                 'data' => [],
                 'type' => 'unauthorized'
             ], 401);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'query_operator' => 'nullable|in:and,or',
+            'operator_category' => 'nullable|in:any,all',
+            'operator_tags' => 'nullable|in:any,all',
+            'categories' => 'nullable|array',
+            'categories.*' => 'nullable|in:' . implode(',', $this->getCategories()->pluck('id')->toArray()),
+            'tags' => 'nullable|array',
+            'tags.*' => 'nullable|in:' . implode(',', $this->getTags()->pluck('id')->toArray()),
+            'created_at' => 'nullable|date_format:d/m/Y',
+            'updated_at' => 'nullable|date_format:d/m/Y',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => '',
+                'status' => 'error',
+                'data' => $validator->messages()->get('*'),
+                'type' => 'validation'
+            ]);
         }
 
         $data = [];
@@ -69,7 +88,7 @@ class PostController extends Controller
     {
         if (!hasAnyRole(['administrator', 'author'], $this->user)) {
             return response()->json([
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
                 'status' => 'error',
                 'data' => [],
                 'type' => 'unauthorized'
@@ -94,11 +113,40 @@ class PostController extends Controller
         ], 200);
     }
 
+    public function getPostSlug($slug)
+    {
+        if (!hasAnyRole(['administrator', 'author'], $this->user)) {
+            return response()->json([
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
+                'status' => 'error',
+                'data' => [],
+                'type' => 'unauthorized'
+            ], 401);
+        }
+
+        $data = [];
+
+        if (hasRole('administrator', $this->user)) {
+            $data = Post::with(['tags', 'categories'])->where('slug', $slug)->get();
+        }
+
+        if (hasRole('author', $this->user) && !hasRole('administrator', $this->user)) {
+            $data = Post::with(['tags', 'categories'])->where('slug', $slug)->where('user_id', $this->user->id)->get();
+        }
+
+        return response()->json([
+            'message' => '',
+            'status' => 'success',
+            'data' => PostResource::collection($data),
+            'type' => '',
+        ], 200);
+    }
+
     public function store(Request $request)
     {
         if (!hasAnyRole(['administrator', 'author'], $this->user)) {
             return response()->json([
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
                 'status' => 'error',
                 'data' => [],
                 'type' => 'unauthorized'
@@ -125,7 +173,6 @@ class PostController extends Controller
                 'type' => 'validation'
             ]);
         }
-
 
         try {
 
@@ -177,16 +224,16 @@ class PostController extends Controller
     {
         if (!hasAnyRole(['administrator', 'author'], $this->user)) {
             return response()->json([
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
                 'status' => 'error',
                 'data' => [],
                 'type' => 'unauthorized'
             ], 401);
         }
 
-        if(!hasRole('administrator', $this->user) && $post->author->id != $this->user->id) {
+        if (!hasRole('administrator', $this->user) && $post->author->id != $this->user->id) {
             return response()->json([
-                'message' => trans('You do not have permission to perform this action.'),
+                'message' => trans('Você não possui permissão para realizar essa ação.'),
                 'status' => 'error',
                 'data' => [],
                 'type' => 'unauthorized'
@@ -287,7 +334,7 @@ class PostController extends Controller
 
     public function trash(Post $post)
     {
-        if(hasRole('administrator', $this->user)) {
+        if (hasRole('administrator', $this->user)) {
             $post->delete();
             return response()->json([
                 'message' => trans('Post successfully removed but it still can be restored.'),
@@ -297,7 +344,7 @@ class PostController extends Controller
             ]);
         }
 
-        if(hasRole('author', $this->user) && $post->user_id == $this->user->id) {
+        if (hasRole('author', $this->user) && $post->user_id == $this->user->id) {
             $post->delete();
             return response()->json([
                 'message' => trans('Post successfully removed but it still can be restored.'),
@@ -308,7 +355,7 @@ class PostController extends Controller
         }
 
         return response()->json([
-            'message' => trans('You do not have permission to perform this action.'),
+            'message' => trans('Você não possui permissão para realizar essa ação.'),
             'status' => 'error',
             'data' => [],
             'type' => 'unauthorized'
@@ -317,7 +364,7 @@ class PostController extends Controller
 
     public function restore(Post $post)
     {
-        if(hasRole('administrator', $this->user)) {
+        if (hasRole('administrator', $this->user)) {
             $post->restore();
             return response()->json([
                 'message' => trans('Post was restored.'),
@@ -327,7 +374,7 @@ class PostController extends Controller
             ]);
         }
 
-        if(hasRole('author', $this->user) && $this->user->id == $post->user_id) {
+        if (hasRole('author', $this->user) && $this->user->id == $post->user_id) {
             $post->restore();
             return response()->json([
                 'message' => trans('Post was restored.'),
@@ -338,7 +385,7 @@ class PostController extends Controller
         }
 
         return response()->json([
-            'message' => trans('You do not have permission to perform this action.'),
+            'message' => trans('Você não possui permissão para realizar essa ação.'),
             'status' => 'error',
             'data' => [],
             'type' => 'unauthorized'
@@ -347,7 +394,7 @@ class PostController extends Controller
 
     public function delete(Post $post)
     {
-        if(hasRole('administrator', $this->user)) {
+        if (hasRole('administrator', $this->user)) {
             $post->forceDelete();
             return response()->json([
                 'message' => trans('Post was permanently removed.'),
@@ -357,7 +404,7 @@ class PostController extends Controller
             ]);
         }
 
-        if(hasRole('author', $this->user) && $this->user->id == $post->user_id) {
+        if (hasRole('author', $this->user) && $this->user->id == $post->user_id) {
             $post->forceDelete();
             return response()->json([
                 'message' => trans('Post was permanently removed.'),
@@ -368,7 +415,7 @@ class PostController extends Controller
         }
 
         return response()->json([
-            'message' => trans('You do not have permission to perform this action.'),
+            'message' => trans('Você não possui permissão para realizar essa ação.'),
             'status' => 'error',
             'data' => [],
             'type' => 'unauthorized'

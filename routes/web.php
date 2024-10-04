@@ -11,16 +11,18 @@ use App\Http\Controllers\Web\CategoryController;
 use App\Http\Controllers\Web\DashboardController;
 
 Route::get('/', function () {
-    return view('welcome')->with([
-        'posts' => Post::limit(3)->get(),
-    ]);
+    // return view('welcome')->with([
+    //     'posts' => Post::limit(3)->get(),
+    // ]);
+
+    return redirect()->route('login');
 });
 
-Route::get('post/{slug}/{id}', function ($slug, $id) {
-    return view('show-post')->with([
-        'post' => Post::where('id', $id)->where('slug', $slug)->first(),
-    ]);
-})->name('show-post');
+// Route::get('post/{slug}/{id}', function ($slug, $id) {
+//     return view('show-post')->with([
+//         'post' => Post::where('id', $id)->where('slug', $slug)->first(),
+//     ]);
+// })->name('show-post');
 
 Route::middleware([
     'auth:sanctum',
@@ -66,8 +68,9 @@ Route::middleware([
     Route::controller(UsersController::class)->group(function () {
         Route::get(uri: 'users', action: 'users')->name('dashboard.users');
         Route::get('user/{user}', 'edit')->name('dashboard.user');
+        Route::get(uri: 'settings', action: 'settings')->name('dashboard.settings');
     });
-
+    
     Route::get('linkstorage', function () {
         Artisan::call('storage:link');
     });
